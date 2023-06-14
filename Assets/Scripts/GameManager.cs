@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -9,6 +7,15 @@ using Random = System.Random;
 
 public class GameManager : MonoBehaviour
 {
+    #region Constants
+    private const string PLAYER_1 = "Player1 ";
+    private const string PLAYER_2 = "Player2 ";
+    private const string WON = "Won!!!  ";
+    private const string TIE = "OMG It's a tie!!!   ";
+    private const string GAME_OVER = "GameOver";
+    #endregion
+
+    #region Serialized fields
     [SerializeField]
     private TileGrid _tileGrid;
     [SerializeField]
@@ -23,25 +30,26 @@ public class GameManager : MonoBehaviour
     private int _gridSize;
     [SerializeField]
     public float _moveTime = 0.5f;
+    #endregion
 
-
+    #region Class Members
     private PlayerType _playerTurn;
     private bool _gameInSession;
     private List<Player> _players;
     private float time = 0.0f;
     private Tile _currentTile;
     private Tile _addedTile;
+    #endregion
 
-
+    #region Unity Methods
     private void Start()
     {
         StartGame();
     }
 
-   
-
     private void Update()
     {
+
         if (!_gameInSession)
         {
             return;
@@ -57,7 +65,26 @@ public class GameManager : MonoBehaviour
             SwitchTurns();
         }
     }
+    #endregion
 
+    #region Buttons Functions
+    public void PlayAgain()
+    {
+        ResetGrid();
+        InstantiatePlayers();
+        _gameInSession = true;
+        _playAgainButton.SetActive(false);
+        _mainMenuButton.SetActive(false);
+        _player2Score.color = Color.white;
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+    #endregion
+
+    #region Private Methods
     private void StartGame()
     {
         _tileGrid.InitializeGrid(_gridSize);
@@ -94,53 +121,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PlayAgain()
-    {
-        ResetGrid();
-        InstantiatePlayers();
-        _gameInSession = true;
-        _playAgainButton.SetActive(false);
-        _mainMenuButton.SetActive(false);
-        _player2Score.color = Color.white;
-    }
-
-    public void GoToMainMenu()
-    {
-        SceneManager.LoadSceneAsync(0);
-    }
-
     private void CheckPlayersScore()
     {
         var player1Score = _tileGrid.GetScorePlayerScore(PlayerType.Player1);
         var player2Score = _tileGrid.GetScorePlayerScore(PlayerType.Player2);
 
-        _player1Score.text = "Player 1: " + player1Score;
-        _player2Score.text = "Player 2: " + player2Score;
+        _player1Score.text = PLAYER_1 + ": " + player1Score;
+        _player2Score.text = PLAYER_2 + ": " + player2Score;
 
         if (player1Score + player2Score == Mathf.Pow(_gridSize, 2))
         {
             _gameInSession = false;
-            _player1Score.text = "GameOver";
+            _player1Score.text = GAME_OVER;
             if (player1Score > player2Score)
             {
                 _player2Score.color = Color.red;
-                _player2Score.text = "Player 1 Won   " + player1Score + " : " + player2Score;
+                _player2Score.text = PLAYER_1 + WON + player1Score + " : " + player2Score;
 
             }
             else if(player1Score < player2Score)
             {
                 _player2Score.color = Color.blue;
-                _player2Score.text = "Player 2 Won!!!   " + player2Score + " : " + player1Score;
+                _player2Score.text = PLAYER_1 + WON + player2Score + " : " + player1Score;
             }
             else
             {
-                _player2Score.text = "OMG It's a tie!!!   " + player2Score + " : " + player1Score;
+                _player2Score.text = TIE + player2Score + " : " + player1Score;
             }
             _playAgainButton.SetActive(true);
             _mainMenuButton.SetActive(true);
         }
     }
-
     private void InstantiatePlayers()
     {
         _players = new List<Player>();
@@ -290,4 +301,5 @@ public class GameManager : MonoBehaviour
             _playerTurn = PlayerType.Player1;
         }
     }
+    #endregion
 }

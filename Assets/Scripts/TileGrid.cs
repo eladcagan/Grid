@@ -1,24 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TileGrid : MonoBehaviour
 {
+    #region Constants
     private const int TILE_OFFSET = 120;
+    #endregion
 
+    #region Serialized Fields
     [SerializeField]
     private Tile _tilePrefab;
     [SerializeField]
     private RectTransform _tilesAnchor;
+    #endregion
 
+    #region Properties
     public Dictionary<Vector2Int, Tile> Tiles
     {
         get;
         private set;
     }
+    #endregion
 
+    #region Class Members
     private int _gridSize;
+    #endregion
 
+    #region Public Methods
     public void InitializeGrid(int gridSize)
     {
         if(Tiles != null)
@@ -75,7 +83,9 @@ public class TileGrid : MonoBehaviour
     {
         Tiles[tilePosition].SetOwner(player);
     }
+    #endregion
 
+    #region Private Methods
     private Dictionary<Vector2Int, Tile> GetAdjacentTilesHelper(int tilesOffset, Vector2Int tilePosition)
     {
         var adjecentTiles = new Dictionary<Vector2Int, Tile>(new Vector2Comparer());
@@ -153,8 +163,10 @@ public class TileGrid : MonoBehaviour
         }
         return adjecentTiles;
     }
+    #endregion
 }
 
+#region Comperator
 public class Vector2Comparer : IEqualityComparer<Vector2Int>
 {
 
@@ -168,4 +180,4 @@ public class Vector2Comparer : IEqualityComparer<Vector2Int>
         return Mathf.FloorToInt(vec.x) ^ Mathf.FloorToInt(vec.y) << 2;
     }
 }
-
+#endregion

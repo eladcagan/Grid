@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
+    #region Serialized Fields
     [SerializeField]
     private Image _tileUI;
+    #endregion
 
     #region Properties
     public Dictionary<Vector2Int, Tile> AdjacentTiles
@@ -35,11 +35,19 @@ public class Tile : MonoBehaviour
     }
     #endregion
 
+    #region Public Methods
     public void InitializeTile(int coordinateX, int coordinateY)
     {
         SetTilePosition(coordinateX, coordinateY);
     }
+    public void SetOwner(PlayerType player)
+    {
+        Owner = player;
+        UpdateTileVisuals(player);
+    }
+    #endregion
 
+    #region private Methods
     private void SetTilePosition(int coordinateX, int coordinateY)
     {
         Vector2Int tilePosition = new Vector2Int
@@ -50,14 +58,7 @@ public class Tile : MonoBehaviour
 
         TilePosition = tilePosition;
     }
-
-    public void SetOwner(PlayerType player)
-    {
-        Owner = player;
-        UpdateTileVisuals(player);
-    }
-
-
+    
     private void UpdateTileVisuals(PlayerType player)
     {
         switch (player)
@@ -73,4 +74,6 @@ public class Tile : MonoBehaviour
                 break;
         }
     }
+    #endregion
+
 }
