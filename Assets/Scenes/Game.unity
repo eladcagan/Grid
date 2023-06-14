@@ -488,7 +488,7 @@ MonoBehaviour:
   _playAgainButton: {fileID: 966908614}
   _mainMenuButton: {fileID: 133455929}
   _gridSize: 6
-  _moveTime: 0.1
+  _moveTime: 0.5
 --- !u!4 &292667282
 Transform:
   m_ObjectHideFlags: 0
